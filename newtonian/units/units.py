@@ -168,10 +168,13 @@ class Quantity:
 	def __mul__(self, other):
 		if isinstance(other, Quantity):
 			ret = Quantity(self.value * other.value, self.dimension + other.dimension)
-			if ret.dimension == Unit.dimensionless:
-				return ret.value
-			else:
-				return ret
+			return ret
+			
+			# todo: 무차원 상수를 어떻게 다뤄야 하지
+			# if ret.dimension == Unit.dimensionless:
+			# 	return ret.value
+			# else:
+			# 	return ret
 		elif isinstance(other, tuple):
 			return Quantity(self.value * Vec(other), self.dimension)
 		elif isinstance(other, Iterable):
@@ -215,11 +218,11 @@ class Quantity:
 	def __float__(self):
 		return float(self.value)
 	
-	def is_vector(self, unit=None):
-		return isinstance(self.value, Vec) and (unit is None or self.unit == unit)
+	def is_vector(self, unit: "Quantity" = None):
+		return isinstance(self.value, Vec) and (unit is None or self.unit == unit.unit)
 	
-	def is_scalar(self, unit=None):
-		return not self.is_vector() and (unit is None or self.unit == unit)
+	def is_scalar(self, unit: "Quantity" = None):
+		return not self.is_vector() and (unit is None or self.unit == unit.unit)
 	
 	def magnitude(self):
 		return abs(self)
